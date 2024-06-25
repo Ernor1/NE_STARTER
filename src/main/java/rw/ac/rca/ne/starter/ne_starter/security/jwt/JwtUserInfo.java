@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import rw.ac.rca.ne.starter.ne_starter.models.Role;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,6 +15,6 @@ import lombok.experimental.Accessors;
 public class JwtUserInfo {
     private String userId;
     private String email;
-    private String role;
+    private List<Role> role;
 }
 

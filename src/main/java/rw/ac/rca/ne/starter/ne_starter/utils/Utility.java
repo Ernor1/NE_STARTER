@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 public class Utility {
     private static final String ALPHANUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -33,6 +34,21 @@ public class Utility {
 
     public static char randomStr() {
         return ALPHA.charAt(rng.nextInt(ALPHA.length()));
+    }
+    public String generateActivationCode() {
+        return UUID.randomUUID().toString();
+    }
+    public static String generateAccountNumber() {
+        // Generate a random UUID
+        UUID uuid = UUID.randomUUID();
+
+        // Convert the UUID to a string and remove the hyphens
+        String accountNumber = uuid.toString().replaceAll("-", "");
+
+        // Take the first 12 characters of the string as the account number
+        accountNumber = accountNumber.substring(0, 12);
+
+        return accountNumber;
     }
 
     public static String randomUUID(int length, int spacing, char returnType) {

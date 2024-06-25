@@ -47,7 +47,8 @@ public class SecurityConfig {
                         "/api/v1/users/create-admin",
                         "/api/v1/importing/**",
                         "/api/v1/location",
-                        "/api/v1/roles/**"
+                        "/api/v1/roles/**",
+                        "/api/v1/customers/**"
                 )
                 .permitAll()
                 .antMatchers(

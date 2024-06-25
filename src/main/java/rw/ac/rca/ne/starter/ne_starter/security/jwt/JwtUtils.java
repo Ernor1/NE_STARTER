@@ -4,13 +4,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import rw.ac.rca.ne.starter.ne_starter.exceptions.JWTVerificationException;
+import rw.ac.rca.ne.starter.ne_starter.models.Role;
 import rw.ac.rca.ne.starter.ne_starter.security.user.UserSecurityDetails;
 
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -51,7 +54,7 @@ public class JwtUtils {
         return !currentTime.before(expirationDate);
     }
 
-        public String createToken(UUID userId , String email , String role){
+        public String createToken(UUID userId , String email , List<GrantedAuthority> roles){
 
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MONTH , 1);
@@ -59,7 +62,7 @@ public class JwtUtils {
         return  Jwts.builder()
                 .claim(CLAIM_KEY_USER_ID , userId)
                 .claim(CLAIM_KEY_EMAIL , email)
-                .claim(CLAIM_KEY_ROLE , role)
+                .claim(CLAIM_KEY_ROLE , roles)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(calendar.getTime())
                 .signWith(SignatureAlgorithm.HS256 , jwtSecretKey).compact();
@@ -69,9 +72,9 @@ public class JwtUtils {
         Claims claims = extractAllClaims(token);
         String userId = (String) claims.get(CLAIM_KEY_USER_ID);
         String email = (String) claims.get(CLAIM_KEY_EMAIL);
-        String role = (String) claims.get(CLAIM_KEY_ROLE);
+        List <Role> roles = (List<Role>) claims.get(CLAIM_KEY_ROLE);
         return new JwtUserInfo().setEmail(email)
-                .setRole(role)
+                .setRole(roles)
                 .setUserId(userId);
     }
 

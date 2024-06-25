@@ -33,6 +33,7 @@ public abstract class Person extends Initializer {
 
     private String email;
 
+
     @Column(name = "dob")
     private Date dob;
 

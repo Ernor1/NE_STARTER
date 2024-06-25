@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "roles" , uniqueConstraints = {@UniqueConstraint(columnNames = {"code"})})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,8 +26,6 @@ public class Role {
     @NotNull
     public String roleName;
 
-    @Column
-    public String code;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "roles" , fetch = FetchType.LAZY)
