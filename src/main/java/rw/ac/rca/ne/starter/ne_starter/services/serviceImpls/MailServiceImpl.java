@@ -78,17 +78,19 @@ public class MailServiceImpl {
 
         Mail mail = new Mail(
 
-                user.getUsername(), user.getEmail(), "", "staff-register");
+                user.getUsername(), user.getEmail(), "", "user-register");
         sendMail(mail);
     }
-    public void sendWelcomeEmail(User user) {
+    public void sendBankOperationEmail(String bankOperation, double amount, String accountNumber, String accountName,String customerName,String email) {
         Mail mail = new Mail(
-                appName,
-                "Welcome to"  +appName+", Your account was created",
-                user.getUsername(),
-                user.getEmail(),
-                "Welcome-email",
-                appName
+                bankOperation,
+                String.valueOf(amount),
+                customerName,
+                email,
+                accountNumber,
+                accountName,
+                "bank-operation",
+                LocalDateTime.now().toString()
         );
 
         sendMail(mail);
@@ -125,6 +127,8 @@ public class MailServiceImpl {
             context.setVariable("name", mail.getFullNames());
             context.setVariable("otherData", mail.getOtherData());
             context.setVariable("subject",mail.getSubject());
+            context.setVariable("username",mail.getFullNames());
+            context.setVariable("date",mail.getDate());
 
             String html = templateEngine.process(mail.getTemplate(), context);
             helper.setTo(mail.getToEmail());

@@ -1,32 +1,41 @@
 package rw.ac.rca.ne.starter.ne_starter.services.serviceImpls;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rw.ac.rca.ne.starter.ne_starter.dtos.requests.CreateAdminDTO;
+import rw.ac.rca.ne.starter.ne_starter.dtos.requests.CreateCustomerDTO;
+import rw.ac.rca.ne.starter.ne_starter.enums.Roles;
 import rw.ac.rca.ne.starter.ne_starter.exceptions.BadRequestException;
 import rw.ac.rca.ne.starter.ne_starter.exceptions.NotFoundException;
 import rw.ac.rca.ne.starter.ne_starter.exceptions.UnAuthorizedException;
+import rw.ac.rca.ne.starter.ne_starter.models.Customer;
 import rw.ac.rca.ne.starter.ne_starter.models.Person;
+import rw.ac.rca.ne.starter.ne_starter.models.Role;
 import rw.ac.rca.ne.starter.ne_starter.models.User;
+import rw.ac.rca.ne.starter.ne_starter.repositories.IRoleRepository;
 import rw.ac.rca.ne.starter.ne_starter.repositories.IUserRepository;
 import rw.ac.rca.ne.starter.ne_starter.security.user.UserSecurityDetails;
 import rw.ac.rca.ne.starter.ne_starter.services.IUserService;
+import rw.ac.rca.ne.starter.ne_starter.utils.ExceptionUtils;
+import rw.ac.rca.ne.starter.ne_starter.utils.Hash;
+import rw.ac.rca.ne.starter.ne_starter.utils.Utility;
 
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl  implements IUserService {
 
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
+    private final IRoleRepository roleRepository;
+    private final MailServiceImpl mailService;
 
-    @Autowired
-    public UserServiceImpl(IUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+
 
     public  boolean isUserLoggedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -45,6 +54,7 @@ public class UserServiceImpl  implements IUserService {
         if (authentication != null) {
             System.out.println("here");
             System.out.println(authentication.getPrincipal() );
+            System.out.println(authentication.getAuthorities().size());
             userSecurityDetails = (UserSecurityDetails) authentication.getPrincipal();
             return this.userRepository.findUserByEmail(userSecurityDetails.getUsername()).orElseThrow(() -> new UnAuthorizedException("You are not authorized! please login"));
         } else {
@@ -75,4 +85,80 @@ public class UserServiceImpl  implements IUserService {
             return true;
         }
     }
+
+    @Override
+    public List<User> findAll() {
+        try {
+            return userRepository.findAll();
+        } catch (Exception e) {
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
+    }
+
+    @Override
+    public User findById(UUID id) {
+        try {
+            return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        } catch (Exception e) {
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
+    }
+
+    @Override
+    public User saveUser(CreateCustomerDTO userDto, Roles role) {
+        try {
+            if(userRepository.findUserByEmail(userDto.getEmail()).isPresent()){
+                throw new BadRequestException("Email already in use");
+            }
+            User user1= new User(userDto.getFirstName(),userDto.getLastName(),userDto.getEmail(),userDto.getDateOfBirth(),userDto.getGender(),userDto.getPhoneNumber(),userDto.getNationalId(),userDto.getUsername(), Utility.generatedCode());
+            user1.setPassword(Hash.hashPassword(userDto.getPassword()));
+
+            Set<Role> roles= new HashSet<>();
+            roles.add(roleRepository.findByRoleName(role.toString()));
+            user1.setRoles(roles);
+           User user= userRepository.save(user1);
+           if(user !=null){
+               mailService.sendAccountVerificationEmail(user1);
+
+           }
+            return user;
+
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+
+        }
+    }
+
+    @Override
+    public User createAdmin(CreateAdminDTO userDto) {
+        try{
+            if(userRepository.findUserByEmail(userDto.getEmail()).isPresent()){
+                throw new BadRequestException("Email already in use");
+            }
+            if(userDto.getAdminKey().equals("admin123")){
+                User user1= new User(userDto.getFirstName(),userDto.getLastName(),userDto.getEmail(),userDto.getDateOfBirth(),userDto.getGender(),userDto.getPhoneNumber(),userDto.getNationalId(),userDto.getUsername(),Utility.generatedCode());
+                user1.setPassword(Hash.hashPassword(userDto.getPassword()));
+                Set<Role> roles= new HashSet<>();
+                roles.add(roleRepository.findByRoleName(Roles.ADMIN.toString()));
+                user1.setRoles(roles);
+                User user= userRepository.save(user1);
+                if(user !=null){
+                    mailService.sendAccountVerificationEmail(user1);
+
+                }
+                return user;
+
+            }else{
+                throw new BadRequestException("Invalid admin key");
+            }
+
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
+    }
+
 }

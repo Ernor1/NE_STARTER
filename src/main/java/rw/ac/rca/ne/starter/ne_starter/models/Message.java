@@ -7,10 +7,7 @@ import lombok.Setter;
 import rw.ac.rca.ne.starter.ne_starter.audits.Initializer;
 import rw.ac.rca.ne.starter.ne_starter.enums.EBankOperation;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +19,13 @@ public class Message extends Initializer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private UUID transactionId;
+    @ManyToOne
+    private Customer customer;
     private EBankOperation operation;
     private String message;
+    public Message(Customer customer, EBankOperation operation, String message) {
+        this.customer = customer;
+        this.operation = operation;
+        this.message = message;
+    }
 }

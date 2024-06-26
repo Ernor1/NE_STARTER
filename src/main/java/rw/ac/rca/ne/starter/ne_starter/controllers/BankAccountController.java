@@ -57,6 +57,54 @@ public class BankAccountController {
         }
 
     }
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse> getAllBankAccounts() {
+        try {
+            logAction(String.format("Request for getting all Bank accounts"));
+            return ResponseEntity.ok().body(new ApiResponse(
+                            true,
+                            "Bank Accounts fetched successfully",
+                            bankAccountService.findAll()
+                    )
+            );
+        }catch (Exception e){
+            e.printStackTrace();
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
+
+    }
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<ApiResponse> getAllBankAccountsByCustomerId(@PathVariable UUID customerId) {
+        try {
+            logAction(String.format("Request for getting all Bank accounts by customer"));
+            return ResponseEntity.ok().body(new ApiResponse(
+                            true,
+                            "Bank Accounts fetched successfully",
+                            bankAccountService.findAllByCustomerId(customerId)
+                    )
+            );
+        }catch (Exception e){
+            e.printStackTrace();
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
+
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getBankAccountById(@PathVariable UUID id) {
+        try {
+            logAction(String.format("Request for getting Bank account by id"));
+            return ResponseEntity.ok().body(new ApiResponse(
+                            true,
+                            "Bank Account fetched successfully",
+                            bankAccountService.findById(id)
+                    )
+            );
+        }catch (Exception e){
+            e.printStackTrace();
+            return ExceptionUtils.handleControllerExceptions(e);
+        }
+
+    }
 
 
 }

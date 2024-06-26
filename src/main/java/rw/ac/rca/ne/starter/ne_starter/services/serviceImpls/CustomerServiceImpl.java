@@ -17,7 +17,9 @@ import rw.ac.rca.ne.starter.ne_starter.utils.Hash;
 import rw.ac.rca.ne.starter.ne_starter.utils.Utility;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -54,4 +56,24 @@ public class CustomerServiceImpl implements ICustomerService {
 
         }
     }
+
+    @Override
+    public Customer findById(UUID id) {
+        try {
+            return customerRepository.findById(id).orElseThrow(() -> new BadRequestException("Customer not found"));
+        } catch (Exception e) {
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
+    }
+    @Override
+    public List<Customer> findAll() {
+        try {
+            return customerRepository.findAll();
+        } catch (Exception e) {
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
+    }
+
 }

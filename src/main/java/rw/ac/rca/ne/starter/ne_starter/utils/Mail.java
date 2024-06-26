@@ -20,6 +20,7 @@ public class Mail {
     private String data;
     private Object otherData;
     private File file;
+    private String date;
 
     public Mail(String appName, String subject, String fullNames, String toEmail, String data, String template) {
         this.appName = appName;
@@ -28,6 +29,16 @@ public class Mail {
         this.toEmail = toEmail;
         this.template = template;
         this.data = data;
+    }
+    public Mail(String appName, String subject, String fullNames, String toEmail, String data,String otherData, String template,String date) {
+        this.appName = appName;
+        this.subject = subject;
+        this.fullNames = fullNames;
+        this.toEmail = toEmail;
+        this.template = template;
+        this.data = data;
+        this.otherData=otherData;
+        this.date=date;
     }
 
     public Mail(String username, String courseName, String s) {
