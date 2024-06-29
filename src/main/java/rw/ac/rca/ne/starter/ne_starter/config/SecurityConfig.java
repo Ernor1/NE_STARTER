@@ -58,7 +58,10 @@ public class SecurityConfig {
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/webjars/**")
-                .permitAll() // the above are the endpoints to the swagger documentation
+                .permitAll()
+                // the above are the endpoints to the swagger documentation
+//                .antMatchers("/api/v1/users/create-admin").hasAuthority("ADMIN")
+
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

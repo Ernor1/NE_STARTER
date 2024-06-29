@@ -42,9 +42,9 @@ public class AccountWithdrawController {
     private Pageable pageable = null;
 
 
-    @PostMapping("/save")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse> createAccountSave(@RequestBody WithDrawDTO withdrawDto) {
+    @PostMapping("/withdraw")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
+    public ResponseEntity<ApiResponse> withdraw(@RequestBody WithDrawDTO withdrawDto) {
         try {
             logAction(String.format("Request for Saving amount in Bank account"));
             return ResponseEntity.ok().body(new ApiResponse(
@@ -60,6 +60,7 @@ public class AccountWithdrawController {
 
     }
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllAccountSaves() {
         try {
             logAction(String.format("Request for getting all Account saves"));
@@ -74,9 +75,10 @@ public class AccountWithdrawController {
         }
     }
     @GetMapping("/all/{customerId}")
-    public ResponseEntity<ApiResponse> getAllAccountSavesByCustomerId(@PathVariable UUID customerId) {
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
+    public ResponseEntity<ApiResponse> getAllAccountWithdrawsByCustomerId(@PathVariable UUID customerId) {
         try {
-            logAction(String.format("Request for getting all Account saves by customer id"));
+            logAction(String.format("Request for getting all Account withdraws by customer id"));
             return ResponseEntity.ok().body(new ApiResponse(
                     true,
                     "Account saves fetched successfully",
@@ -88,6 +90,7 @@ public class AccountWithdrawController {
         }
     }
     @GetMapping("/withdraw/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAccountSaveById(@PathVariable String id) {
         try {
             logAction(String.format("Request for getting Account save by id"));

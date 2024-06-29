@@ -41,7 +41,7 @@ public class AccountSaveController {
 
 
     @PostMapping("/save")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> createAccountSave(@RequestBody CreateAccountSaveDTO createAccountSaveDTO) {
         try {
             logAction(String.format("Request for Saving amount in Bank account"));
@@ -58,6 +58,7 @@ public class AccountSaveController {
 
     }
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllAccountSaves() {
         try {
             logAction(String.format("Request for getting all Account saves"));
@@ -73,6 +74,7 @@ public class AccountSaveController {
         }
     }
     @GetMapping("/customer/{customerId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllAccountSavesByCustomerId(@PathVariable UUID customerId) {
         try {
             logAction(String.format("Request for getting all Account saves by customer id"));
@@ -88,6 +90,7 @@ public class AccountSaveController {
         }
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAccountSaveById(@PathVariable UUID id) {
         try {
             logAction(String.format("Request for getting Account save by id"));

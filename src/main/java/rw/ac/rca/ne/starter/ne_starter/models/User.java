@@ -10,6 +10,7 @@ import rw.ac.rca.ne.starter.ne_starter.enums.EVisibility;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class User extends Person {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<Role>();
-    public User(String firstName, String lastName, String email, Date dob, EGender gender, String phoneNumber, String nationalId, String username, String activationCode) {
+    public User(String firstName, String lastName, String email, LocalDate dob, EGender gender, String phoneNumber, String nationalId, String username, String activationCode) {
         super(firstName, lastName, email,dob,gender, phoneNumber, nationalId);
         this.username = username;
         this.activationCode = activationCode;

@@ -41,7 +41,7 @@ public class BankAccountController {
 
 
     @PostMapping("/create")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> createBankAccount(@RequestBody CreateBankAccountDTO createBankAccountDTO) {
         try {
             logAction(String.format("Request for creating a Bank account"));
@@ -58,6 +58,7 @@ public class BankAccountController {
 
     }
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllBankAccounts() {
         try {
             logAction(String.format("Request for getting all Bank accounts"));
@@ -74,6 +75,7 @@ public class BankAccountController {
 
     }
     @GetMapping("/customer/{customerId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllBankAccountsByCustomerId(@PathVariable UUID customerId) {
         try {
             logAction(String.format("Request for getting all Bank accounts by customer"));
@@ -90,6 +92,7 @@ public class BankAccountController {
 
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getBankAccountById(@PathVariable UUID id) {
         try {
             logAction(String.format("Request for getting Bank account by id"));

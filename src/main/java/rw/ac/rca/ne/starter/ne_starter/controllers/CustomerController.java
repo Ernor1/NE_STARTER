@@ -41,10 +41,10 @@ public class CustomerController {
 
 
     @PostMapping("/create")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> createCustomer(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
         try {
-//            logAction(String.format("Request for creating a student with Full name :  %s , and email  :  %s", createCustomerDTO.getFirstName() + createCustomerDTO.getLastName() , createCustomerDTO.getEmail()));
+            logAction(String.format("Request for creating a student with Full name :  %s , and email  :  %s", createCustomerDTO.getFirstName() + createCustomerDTO.getLastName() , createCustomerDTO.getEmail()));
             return ResponseEntity.ok().body(new ApiResponse(
                             true,
                             "Customer created successfully",
@@ -58,6 +58,7 @@ public class CustomerController {
 
     }
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllCustomers(){
         try {
             logAction(String.format("Request for getting all customers"));
@@ -73,6 +74,7 @@ public class CustomerController {
         }
     }
     @GetMapping("/customer/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getCustomerById(@PathVariable("id") UUID id){
         try {
             logAction(String.format("Request for getting a customer with id : %s", id));

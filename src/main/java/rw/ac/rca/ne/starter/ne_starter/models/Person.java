@@ -13,6 +13,7 @@ import rw.ac.rca.ne.starter.ne_starter.enums.EGender;
 import rw.ac.rca.ne.starter.ne_starter.enums.EVisibility;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.*;
@@ -35,7 +36,7 @@ public abstract class Person extends Initializer {
 
 
     @Column(name = "dob")
-    private Date dob;
+    private LocalDate dob;
 
     private EGender gender;
 
@@ -51,7 +52,7 @@ public abstract class Person extends Initializer {
 
 
 
-    public Person(String firstName, String lastName, String email, Date dob, EGender gender, String phoneNumber, String nationalId){
+    public Person(String firstName, String lastName, String email, LocalDate dob, EGender gender, String phoneNumber, String nationalId){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

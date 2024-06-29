@@ -20,7 +20,7 @@ import java.util.Set;
 @IgnoreForbiddenApisErrors(reason = "json")
 @EnableWebSecurity
 @EnableGlobalAuthentication()
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
 @EnableTransactionManagement
 public class NeStarterApplication {
     private final IRoleRepository roleRepository;

@@ -1,4 +1,6 @@
-package rw.ac.rca.ne.starter.ne_starter.annotations.Constraits;
+package rw.ac.rca.ne.starter.ne_starter.annotations;
+
+import rw.ac.rca.ne.starter.ne_starter.annotations.Constraits.GenderValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -7,12 +9,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = DateOfBirthValidator.class)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidDateOfBirth {
-    String message() default "Date of birth must not be in the future";
+@Constraint(validatedBy = GenderValidator.class)
+public @interface ValidAccountType {
+    String message() default "Invalid Account Type";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
-

@@ -43,7 +43,7 @@ public class BankTransferController {
 
 
     @PostMapping("/transfer")
-//    @PreAuthorize("hasAuthority('ADMIN')")
+   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> transfer(@RequestBody TransferDTO transferDto) {
         try {
             logAction(String.format("Request for Transferring amount in Bank account"));
@@ -61,6 +61,7 @@ public class BankTransferController {
 
     }
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllAccountTransfers() {
         try {
             logAction(String.format("Request for getting all Bank account transfers"));
@@ -76,6 +77,7 @@ public class BankTransferController {
 
     }
     @GetMapping("/from-customer/{customerId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllAccountTransfersByCustomerId(@PathVariable UUID customerId) {
         try {
             logAction(String.format("Request for getting all Account transfers by customer id"));
@@ -90,6 +92,7 @@ public class BankTransferController {
         }
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAccountTransferById(@PathVariable UUID id) {
         try {
             logAction(String.format("Request for getting Account transfer by id"));
@@ -104,6 +107,7 @@ public class BankTransferController {
         }
     }
     @GetMapping("/to-customer/{customerId}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('CUSTOMER') or hasAuthority('MANAGER')")
     public ResponseEntity<ApiResponse> getAllAccountTransfersToCustomerId(@PathVariable UUID customerId) {
         try {
             logAction(String.format("Request for getting all Account transfers by customer id"));
